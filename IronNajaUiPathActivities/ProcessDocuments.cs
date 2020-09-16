@@ -25,6 +25,18 @@ namespace IronNajaUiPathActivities
             string fileurl = FileUrl.Get(context);
 
             logger.Info($"We're gonna process {fileurl}");
+            var db = new MouseionEntities();
+
+            var amzdata = new tb_amz_arquivos_armazenados
+            {
+                amz_filename = fileurl,
+                amz_full_path = "fullpath",
+                amz_guid = "guid",
+                amz_hash = "hash",
+                amz_store_datetime = System.DateTime.Now
+            };
+            db.tb_amz_arquivos_armazenados.Add(amzdata);
+            db.SaveChanges();
 
             //throw new NotImplementedException();
         }
