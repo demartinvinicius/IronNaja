@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MouseionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tb_amz_arquivos_armazenados">
+          <Key>
+            <PropertyRef Name="amz_id" />
+          </Key>
+          <Property Name="amz_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="amz_hash" Type="char" MaxLength="64" Nullable="false" />
+          <Property Name="amz_guid" Type="char" MaxLength="36" Nullable="false" />
+          <Property Name="amz_full_path" Type="char" MaxLength="100" Nullable="false" />
+          <Property Name="amz_store_datetime" Type="datetime" Nullable="false" />
+          <Property Name="amz_filename" Type="char" MaxLength="53" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_dwn_downloads">
+          <Key>
+            <PropertyRef Name="dwn_id" />
+          </Key>
+          <Property Name="dwn_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dwn_download_datetime" Type="datetime" Nullable="false" />
+          <Property Name="dwn_link" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="amz_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_fky_found_keys">
+          <Key>
+            <PropertyRef Name="fky_id" />
+          </Key>
+          <Property Name="fky_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="amz_id" Type="int" Nullable="false" />
+          <Property Name="fky_keys" Type="nchar" MaxLength="4000" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_21">
+          <End Role="tb_amz_arquivos_armazenados" Type="Self.tb_amz_arquivos_armazenados" Multiplicity="1" />
+          <End Role="tb_dwn_downloads" Type="Self.tb_dwn_downloads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tb_amz_arquivos_armazenados">
+              <PropertyRef Name="amz_id" />
+            </Principal>
+            <Dependent Role="tb_dwn_downloads">
+              <PropertyRef Name="amz_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tb_fky_found_keys_tb_amz_arquivos_armazenados">
+          <End Role="tb_amz_arquivos_armazenados" Type="Self.tb_amz_arquivos_armazenados" Multiplicity="1" />
+          <End Role="tb_fky_found_keys" Type="Self.tb_fky_found_keys" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tb_amz_arquivos_armazenados">
+              <PropertyRef Name="amz_id" />
+            </Principal>
+            <Dependent Role="tb_fky_found_keys">
+              <PropertyRef Name="amz_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MouseionModelStoreContainer">
+          <EntitySet Name="tb_amz_arquivos_armazenados" EntityType="Self.tb_amz_arquivos_armazenados" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tb_dwn_downloads" EntityType="Self.tb_dwn_downloads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tb_fky_found_keys" EntityType="Self.tb_fky_found_keys" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_21" Association="Self.FK_21">
+            <End Role="tb_amz_arquivos_armazenados" EntitySet="tb_amz_arquivos_armazenados" />
+            <End Role="tb_dwn_downloads" EntitySet="tb_dwn_downloads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tb_fky_found_keys_tb_amz_arquivos_armazenados" Association="Self.FK_tb_fky_found_keys_tb_amz_arquivos_armazenados">
+            <End Role="tb_amz_arquivos_armazenados" EntitySet="tb_amz_arquivos_armazenados" />
+            <End Role="tb_fky_found_keys" EntitySet="tb_fky_found_keys" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MouseionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tb_amz_arquivos_armazenados">
+          <Key>
+            <PropertyRef Name="amz_id" />
+          </Key>
+          <Property Name="amz_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="amz_hash" Type="String" MaxLength="64" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="amz_guid" Type="String" MaxLength="36" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="amz_full_path" Type="String" MaxLength="100" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="amz_store_datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="amz_filename" Type="String" MaxLength="53" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tb_dwn_downloads" Relationship="Self.FK_21" FromRole="tb_amz_arquivos_armazenados" ToRole="tb_dwn_downloads" />
+          <NavigationProperty Name="tb_fky_found_keys" Relationship="Self.FK_tb_fky_found_keys_tb_amz_arquivos_armazenados" FromRole="tb_amz_arquivos_armazenados" ToRole="tb_fky_found_keys" />
+        </EntityType>
+        <EntityType Name="tb_dwn_downloads">
+          <Key>
+            <PropertyRef Name="dwn_id" />
+          </Key>
+          <Property Name="dwn_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dwn_download_datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="dwn_link" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="amz_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tb_amz_arquivos_armazenados" Relationship="Self.FK_21" FromRole="tb_dwn_downloads" ToRole="tb_amz_arquivos_armazenados" />
+        </EntityType>
+        <EntityType Name="tb_fky_found_keys">
+          <Key>
+            <PropertyRef Name="fky_id" />
+          </Key>
+          <Property Name="fky_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="amz_id" Type="Int32" Nullable="false" />
+          <Property Name="fky_keys" Type="String" MaxLength="4000" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="tb_amz_arquivos_armazenados" Relationship="Self.FK_tb_fky_found_keys_tb_amz_arquivos_armazenados" FromRole="tb_fky_found_keys" ToRole="tb_amz_arquivos_armazenados" />
+        </EntityType>
+        <Association Name="FK_21">
+          <End Role="tb_amz_arquivos_armazenados" Type="Self.tb_amz_arquivos_armazenados" Multiplicity="1" />
+          <End Role="tb_dwn_downloads" Type="Self.tb_dwn_downloads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tb_amz_arquivos_armazenados">
+              <PropertyRef Name="amz_id" />
+            </Principal>
+            <Dependent Role="tb_dwn_downloads">
+              <PropertyRef Name="amz_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tb_fky_found_keys_tb_amz_arquivos_armazenados">
+          <End Role="tb_amz_arquivos_armazenados" Type="Self.tb_amz_arquivos_armazenados" Multiplicity="1" />
+          <End Role="tb_fky_found_keys" Type="Self.tb_fky_found_keys" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tb_amz_arquivos_armazenados">
+              <PropertyRef Name="amz_id" />
+            </Principal>
+            <Dependent Role="tb_fky_found_keys">
+              <PropertyRef Name="amz_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MouseionEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tb_amz_arquivos_armazenados" EntityType="Self.tb_amz_arquivos_armazenados" />
+          <EntitySet Name="tb_dwn_downloads" EntityType="Self.tb_dwn_downloads" />
+          <EntitySet Name="tb_fky_found_keys" EntityType="Self.tb_fky_found_keys" />
+          <AssociationSet Name="FK_21" Association="Self.FK_21">
+            <End Role="tb_amz_arquivos_armazenados" EntitySet="tb_amz_arquivos_armazenados" />
+            <End Role="tb_dwn_downloads" EntitySet="tb_dwn_downloads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tb_fky_found_keys_tb_amz_arquivos_armazenados" Association="Self.FK_tb_fky_found_keys_tb_amz_arquivos_armazenados">
+            <End Role="tb_amz_arquivos_armazenados" EntitySet="tb_amz_arquivos_armazenados" />
+            <End Role="tb_fky_found_keys" EntitySet="tb_fky_found_keys" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MouseionModelStoreContainer" CdmEntityContainer="MouseionEntities">
+          <EntitySetMapping Name="tb_amz_arquivos_armazenados">
+            <EntityTypeMapping TypeName="MouseionModel.tb_amz_arquivos_armazenados">
+              <MappingFragment StoreEntitySet="tb_amz_arquivos_armazenados">
+                <ScalarProperty Name="amz_id" ColumnName="amz_id" />
+                <ScalarProperty Name="amz_hash" ColumnName="amz_hash" />
+                <ScalarProperty Name="amz_guid" ColumnName="amz_guid" />
+                <ScalarProperty Name="amz_full_path" ColumnName="amz_full_path" />
+                <ScalarProperty Name="amz_store_datetime" ColumnName="amz_store_datetime" />
+                <ScalarProperty Name="amz_filename" ColumnName="amz_filename" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_dwn_downloads">
+            <EntityTypeMapping TypeName="MouseionModel.tb_dwn_downloads">
+              <MappingFragment StoreEntitySet="tb_dwn_downloads">
+                <ScalarProperty Name="dwn_id" ColumnName="dwn_id" />
+                <ScalarProperty Name="dwn_download_datetime" ColumnName="dwn_download_datetime" />
+                <ScalarProperty Name="dwn_link" ColumnName="dwn_link" />
+                <ScalarProperty Name="amz_id" ColumnName="amz_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_fky_found_keys">
+            <EntityTypeMapping TypeName="MouseionModel.tb_fky_found_keys">
+              <MappingFragment StoreEntitySet="tb_fky_found_keys">
+                <ScalarProperty Name="fky_id" ColumnName="fky_id" />
+                <ScalarProperty Name="amz_id" ColumnName="amz_id" />
+                <ScalarProperty Name="fky_keys" ColumnName="fky_keys" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
