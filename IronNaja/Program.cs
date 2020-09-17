@@ -16,7 +16,7 @@ namespace IronNaja
         {
             Dictionary<string, object> arguments = new Dictionary<string, object>()
             {
-                { "FileUrl", "teste" }
+                { "FileUrl", "teste carlinha" }
             };
             WorkflowInvoker.Invoke(new IronNajaUiPathActivities.ProcessDocuments(), arguments);
         }
