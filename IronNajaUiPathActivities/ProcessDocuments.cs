@@ -41,6 +41,22 @@ namespace IronNajaUiPathActivities
         [RequiredArgument]
         public InArgument<string> FileUrl { get; set; }
 
+        [Category("Database")]
+        [RequiredArgument]
+        public InArgument<string> ServerName { get; set; }
+
+        [Category("Database")]
+        [RequiredArgument]
+        public InArgument<string> DatabaseName { get; set; }
+
+        [Category("Database")]
+        [RequiredArgument]
+        public InArgument<string> UserName { get; set; }
+
+        [Category("Database")]
+        [RequiredArgument]
+        public InArgument<string> Password { get; set; }
+
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
         protected override void Execute(CodeActivityContext context)
