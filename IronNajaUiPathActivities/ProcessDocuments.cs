@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Diagnostics;
+using System.Data.Entity.Core.EntityClient;
 
 namespace IronNajaUiPathActivities
 {
@@ -41,19 +42,43 @@ namespace IronNajaUiPathActivities
         {
             logger.Info("Starting the activity process");
 
+            SqlConnectionStringBuilder sqlBuilder = new SqlConnectionStringBuilder();
+
+            sqlBuilder.DataSource = ServerName.Get(context);
+            sqlBuilder.InitialCatalog = DatabaseName.Get(context);
+            sqlBuilder.IntegratedSecurity = false;
+            sqlBuilder.UserID = UserName.Get(context);
+            sqlBuilder.Password = Password.Get(context);
+            sqlBuilder.MultipleActiveResultSets = true;
+            sqlBuilder.ApplicationName = "EntityFramework";
+            sqlBuilder.Encrypt = true;
+
+            EntityConnectionStringBuilder entityConnection = new EntityConnectionStringBuilder();
+
+            entityConnection.Provider = "System.Data.SqlClient";
+            entityConnection.Metadata = @"res://*/Model1.csdl|res://*/Model1.ssdl|res://*/Model1.msl";
+
+            entityConnection.ProviderConnectionString = sqlBuilder.ToString();
+
+            logger.Info(entityConnection.ConnectionString);
+
             Configuration config;
             config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            if (config.GetSection("connectionStrings") != null)
+            {
+                logger.Info("Found config section. It will be deleted");
+                config.Sections.Remove("connectionStrings");
+                config.Save(ConfigurationSaveMode.Full);
+            }
+
             ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings();
-            connectionStringSettings.ConnectionString = "metadata=res://*/Model1.csdl|res://*/Model1.ssdl|res://*/Model1.msl;provider=System.Data.SqlClient;provider connection string=\";data source=mindsforai.database.windows.net;initial catalog=Mouseion;persist security info=True;user id=vinicius;password=M#str@d0;MultipleActiveResultSets=True;App=EntityFramework\"";
+            //connectionStringSettings.ConnectionString = "metadata=res://*/Model1.csdl|res://*/Model1.ssdl|res://*/Model1.msl;provider=System.Data.SqlClient;provider connection string=\";data source=mindsforai.database.windows.net;initial catalog=Mouseion;persist security info=True;user id=vinicius;password=M#str@d0;MultipleActiveResultSets=True;App=EntityFramework\"";
+
+            connectionStringSettings.ConnectionString = entityConnection.ConnectionString;
             connectionStringSettings.ProviderName = "System.Data.EntityClient";
             connectionStringSettings.Name = "MouseionEntities";
             config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
-            //config.ConnectionStrings.ConnectionStrings["MouseionEntities"].ConnectionString = "metadata=res://*/Model1.csdl|res://*/Model1.ssdl|res://*/Model1.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=mindsforai.database.windows.net;initial catalog=Mouseion;persist security info=True;user id=vinicius;password=M#str@d0;MultipleActiveResultSets=True;App=EntityFramework&quot;";
-            //config.ConnectionStrings.ConnectionStrings["MouseionEntities"].ProviderName = "System.Data.SqlClient";
-
-            //ConfigurationSection section = new ConfigurationSection();
-            //
-            //config.Sections.Add()
 
             config.Save(ConfigurationSaveMode.Full);
             ConfigurationManager.RefreshSection("connectionStrings");
