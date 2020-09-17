@@ -13,28 +13,6 @@ using System.Diagnostics;
 
 namespace IronNajaUiPathActivities
 {
-    public class SqlHelper
-    {
-        private SqlConnection cn;
-
-        public SqlHelper(string connectionString)
-        {
-            cn = new SqlConnection(connectionString);
-        }
-
-        public bool IsConnection
-        {
-            get
-            {
-                if (cn.State == System.Data.ConnectionState.Closed)
-                {
-                    cn.Open();
-                }
-                return true;
-            }
-        }
-    }
-
     public class ProcessDocuments : CodeActivity
     {
         [Category("Input")]
@@ -57,7 +35,7 @@ namespace IronNajaUiPathActivities
         [RequiredArgument]
         public InArgument<string> Password { get; set; }
 
-        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         protected override void Execute(CodeActivityContext context)
         {

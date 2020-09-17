@@ -16,9 +16,13 @@ namespace IronNaja
         {
             Dictionary<string, object> arguments = new Dictionary<string, object>()
             {
-                { "FileUrl", "teste carlinha" }
+                { "FileUrl", "teste carlinha"},
+                { "ServerName", "mindsforai.database.windows.net" },
+                { "DatabaseName", "mouseion" },
+                { "UserName", "vinicius" },
+                { "Password", "M#str@d0" }
             };
-            WorkflowInvoker.Invoke(new IronNajaUiPathActivities.ProcessDocuments(), arguments);
+            _ = WorkflowInvoker.Invoke(new IronNajaUiPathActivities.ProcessDocuments(), arguments);
         }
     }
 }
