@@ -29,7 +29,7 @@ namespace IronNajaUiPathActivities
 
             entityConnection.ProviderConnectionString = sqlBuilder.ToString();
 
-            logger.Info(entityConnection.ConnectionString);
+            logger.Info($"String Connection Being Inserted = {entityConnection.ConnectionString}");
 
             Configuration config;
             config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
