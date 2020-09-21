@@ -28,5 +28,6 @@ namespace IronNajaUiPathActivities
         public virtual DbSet<tb_amz_arquivos_armazenados> tb_amz_arquivos_armazenados { get; set; }
         public virtual DbSet<tb_dwn_downloads> tb_dwn_downloads { get; set; }
         public virtual DbSet<tb_fky_found_keys> tb_fky_found_keys { get; set; }
+        public virtual DbSet<tb_tpo_tipos_origem> tb_tpo_tipos_origem { get; set; }
     }
 }

@@ -5,11 +5,13 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="8c3a5677eafc4d46b680d1f10cb058d7" Name="Diagram1">
-        <EntityTypeShape EntityType="MouseionModel.tb_amz_arquivos_armazenados" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="MouseionModel.tb_dwn_downloads" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="MouseionModel.tb_fky_found_keys" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MouseionModel.tb_amz_arquivos_armazenados" Width="2.125" PointX="0.5" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MouseionModel.tb_dwn_downloads" Width="2.625" PointX="6.625" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MouseionModel.tb_fky_found_keys" Width="1.5" PointX="4.375" PointY="4.375" IsExpanded="true" />
         <AssociationConnector Association="MouseionModel.FK_21" ManuallyRouted="false" />
         <AssociationConnector Association="MouseionModel.FK_tb_fky_found_keys_tb_amz_arquivos_armazenados" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MouseionModel.tb_tpo_tipos_origem" Width="1.5" PointX="1.875" PointY="7.5" />
+        <AssociationConnector Association="MouseionModel.FK_tb_amz_arquivos_armazenados_tb_tpo_tipos_origem" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

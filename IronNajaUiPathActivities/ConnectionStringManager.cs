@@ -11,23 +11,25 @@ namespace IronNajaUiPathActivities
 
         public void InsertConnectionString(string Server, string DatabaseName, string UserName, string Password)
         {
-            SqlConnectionStringBuilder sqlBuilder = new SqlConnectionStringBuilder();
+            SqlConnectionStringBuilder sqlBuilder = new SqlConnectionStringBuilder
+            {
+                DataSource = Server,
+                InitialCatalog = DatabaseName,
+                IntegratedSecurity = false,
+                UserID = UserName,
+                Password = Password,
+                MultipleActiveResultSets = true,
+                ApplicationName = "EntityFramework",
+                Encrypt = true
+            };
 
-            sqlBuilder.DataSource = Server;
-            sqlBuilder.InitialCatalog = DatabaseName;
-            sqlBuilder.IntegratedSecurity = false;
-            sqlBuilder.UserID = UserName;
-            sqlBuilder.Password = Password;
-            sqlBuilder.MultipleActiveResultSets = true;
-            sqlBuilder.ApplicationName = "EntityFramework";
-            sqlBuilder.Encrypt = true;
+            EntityConnectionStringBuilder entityConnection = new EntityConnectionStringBuilder
+            {
+                Provider = "System.Data.SqlClient",
+                Metadata = @"res://*/Model1.csdl|res://*/Model1.ssdl|res://*/Model1.msl",
 
-            EntityConnectionStringBuilder entityConnection = new EntityConnectionStringBuilder();
-
-            entityConnection.Provider = "System.Data.SqlClient";
-            entityConnection.Metadata = @"res://*/Model1.csdl|res://*/Model1.ssdl|res://*/Model1.msl";
-
-            entityConnection.ProviderConnectionString = sqlBuilder.ToString();
+                ProviderConnectionString = sqlBuilder.ToString()
+            };
 
             logger.Info($"String Connection Being Inserted = {entityConnection.ConnectionString}");
 
@@ -41,11 +43,12 @@ namespace IronNajaUiPathActivities
                 config.Save(ConfigurationSaveMode.Full);
             }
 
-            ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings();
-
-            connectionStringSettings.ConnectionString = entityConnection.ConnectionString;
-            connectionStringSettings.ProviderName = "System.Data.EntityClient";
-            connectionStringSettings.Name = "MouseionEntities";
+            ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings
+            {
+                ConnectionString = entityConnection.ConnectionString,
+                ProviderName = "System.Data.EntityClient",
+                Name = "MouseionEntities"
+            };
             config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
 
             config.Save(ConfigurationSaveMode.Full);

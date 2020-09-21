@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MouseionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MouseionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tb_amz_arquivos_armazenados">
           <Key>
             <PropertyRef Name="amz_id" />
@@ -15,6 +15,7 @@
           <Property Name="amz_full_path" Type="char" MaxLength="100" Nullable="false" />
           <Property Name="amz_store_datetime" Type="datetime" Nullable="false" />
           <Property Name="amz_filename" Type="char" MaxLength="53" Nullable="false" />
+          <Property Name="tpo_sigla" Type="nchar" MaxLength="4" Nullable="false" />
         </EntityType>
         <EntityType Name="tb_dwn_downloads">
           <Key>
@@ -33,8 +34,17 @@
           <Property Name="amz_id" Type="int" Nullable="false" />
           <Property Name="fky_keys" Type="nchar" MaxLength="4000" Nullable="false" />
         </EntityType>
+        <EntityType Name="tb_tpo_tipos_origem">
+          <Key>
+            <PropertyRef Name="tpo_sigla" />
+          </Key>
+          <Property Name="tpo_sigla" Type="nchar" MaxLength="4" Nullable="false" />
+          <Property Name="tpo_descricao" Type="nchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <Association Name="FK_21">
-          <End Role="tb_amz_arquivos_armazenados" Type="Self.tb_amz_arquivos_armazenados" Multiplicity="1" />
+          <End Role="tb_amz_arquivos_armazenados" Type="Self.tb_amz_arquivos_armazenados" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="tb_dwn_downloads" Type="Self.tb_dwn_downloads" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tb_amz_arquivos_armazenados">
@@ -45,8 +55,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tb_amz_arquivos_armazenados_tb_tpo_tipos_origem">
+          <End Role="tb_tpo_tipos_origem" Type="Self.tb_tpo_tipos_origem" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tb_amz_arquivos_armazenados" Type="Self.tb_amz_arquivos_armazenados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tb_tpo_tipos_origem">
+              <PropertyRef Name="tpo_sigla" />
+            </Principal>
+            <Dependent Role="tb_amz_arquivos_armazenados">
+              <PropertyRef Name="tpo_sigla" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tb_fky_found_keys_tb_amz_arquivos_armazenados">
-          <End Role="tb_amz_arquivos_armazenados" Type="Self.tb_amz_arquivos_armazenados" Multiplicity="1" />
+          <End Role="tb_amz_arquivos_armazenados" Type="Self.tb_amz_arquivos_armazenados" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="tb_fky_found_keys" Type="Self.tb_fky_found_keys" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tb_amz_arquivos_armazenados">
@@ -61,17 +87,21 @@
           <EntitySet Name="tb_amz_arquivos_armazenados" EntityType="Self.tb_amz_arquivos_armazenados" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tb_dwn_downloads" EntityType="Self.tb_dwn_downloads" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tb_fky_found_keys" EntityType="Self.tb_fky_found_keys" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tb_tpo_tipos_origem" EntityType="Self.tb_tpo_tipos_origem" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_21" Association="Self.FK_21">
             <End Role="tb_amz_arquivos_armazenados" EntitySet="tb_amz_arquivos_armazenados" />
             <End Role="tb_dwn_downloads" EntitySet="tb_dwn_downloads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tb_amz_arquivos_armazenados_tb_tpo_tipos_origem" Association="Self.FK_tb_amz_arquivos_armazenados_tb_tpo_tipos_origem">
+            <End Role="tb_tpo_tipos_origem" EntitySet="tb_tpo_tipos_origem" />
+            <End Role="tb_amz_arquivos_armazenados" EntitySet="tb_amz_arquivos_armazenados" />
           </AssociationSet>
           <AssociationSet Name="FK_tb_fky_found_keys_tb_amz_arquivos_armazenados" Association="Self.FK_tb_fky_found_keys_tb_amz_arquivos_armazenados">
             <End Role="tb_amz_arquivos_armazenados" EntitySet="tb_amz_arquivos_armazenados" />
             <End Role="tb_fky_found_keys" EntitySet="tb_fky_found_keys" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MouseionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -87,6 +117,8 @@
           <Property Name="amz_filename" Type="String" MaxLength="53" FixedLength="true" Unicode="false" Nullable="false" />
           <NavigationProperty Name="tb_dwn_downloads" Relationship="Self.FK_21" FromRole="tb_amz_arquivos_armazenados" ToRole="tb_dwn_downloads" />
           <NavigationProperty Name="tb_fky_found_keys" Relationship="Self.FK_tb_fky_found_keys_tb_amz_arquivos_armazenados" FromRole="tb_amz_arquivos_armazenados" ToRole="tb_fky_found_keys" />
+          <Property Name="tpo_sigla" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="tb_tpo_tipos_origem" Relationship="MouseionModel.FK_tb_amz_arquivos_armazenados_tb_tpo_tipos_origem" FromRole="tb_amz_arquivos_armazenados" ToRole="tb_tpo_tipos_origem" />
         </EntityType>
         <EntityType Name="tb_dwn_downloads">
           <Key>
@@ -143,7 +175,34 @@
             <End Role="tb_amz_arquivos_armazenados" EntitySet="tb_amz_arquivos_armazenados" />
             <End Role="tb_fky_found_keys" EntitySet="tb_fky_found_keys" />
           </AssociationSet>
+          <EntitySet Name="tb_tpo_tipos_origem" EntityType="MouseionModel.tb_tpo_tipos_origem" />
+          <AssociationSet Name="FK_tb_amz_arquivos_armazenados_tb_tpo_tipos_origem" Association="MouseionModel.FK_tb_amz_arquivos_armazenados_tb_tpo_tipos_origem">
+            <End Role="tb_tpo_tipos_origem" EntitySet="tb_tpo_tipos_origem" />
+            <End Role="tb_amz_arquivos_armazenados" EntitySet="tb_amz_arquivos_armazenados" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="tb_tpo_tipos_origem">
+          <Key>
+            <PropertyRef Name="tpo_sigla" />
+          </Key>
+          <Property Name="tpo_sigla" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="tpo_descricao" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="tb_amz_arquivos_armazenados" Relationship="MouseionModel.FK_tb_amz_arquivos_armazenados_tb_tpo_tipos_origem" FromRole="tb_tpo_tipos_origem" ToRole="tb_amz_arquivos_armazenados" />
+        </EntityType>
+        <Association Name="FK_tb_amz_arquivos_armazenados_tb_tpo_tipos_origem">
+          <End Type="MouseionModel.tb_tpo_tipos_origem" Role="tb_tpo_tipos_origem" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="MouseionModel.tb_amz_arquivos_armazenados" Role="tb_amz_arquivos_armazenados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tb_tpo_tipos_origem">
+              <PropertyRef Name="tpo_sigla" />
+            </Principal>
+            <Dependent Role="tb_amz_arquivos_armazenados">
+              <PropertyRef Name="tpo_sigla" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -153,6 +212,7 @@
           <EntitySetMapping Name="tb_amz_arquivos_armazenados">
             <EntityTypeMapping TypeName="MouseionModel.tb_amz_arquivos_armazenados">
               <MappingFragment StoreEntitySet="tb_amz_arquivos_armazenados">
+                <ScalarProperty Name="tpo_sigla" ColumnName="tpo_sigla" />
                 <ScalarProperty Name="amz_id" ColumnName="amz_id" />
                 <ScalarProperty Name="amz_hash" ColumnName="amz_hash" />
                 <ScalarProperty Name="amz_guid" ColumnName="amz_guid" />
@@ -178,6 +238,14 @@
                 <ScalarProperty Name="fky_id" ColumnName="fky_id" />
                 <ScalarProperty Name="amz_id" ColumnName="amz_id" />
                 <ScalarProperty Name="fky_keys" ColumnName="fky_keys" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_tpo_tipos_origem">
+            <EntityTypeMapping TypeName="MouseionModel.tb_tpo_tipos_origem">
+              <MappingFragment StoreEntitySet="tb_tpo_tipos_origem">
+                <ScalarProperty Name="tpo_descricao" ColumnName="tpo_descricao" />
+                <ScalarProperty Name="tpo_sigla" ColumnName="tpo_sigla" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

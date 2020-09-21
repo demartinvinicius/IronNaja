@@ -27,10 +27,12 @@ namespace IronNajaUiPathActivities
         public string amz_full_path { get; set; }
         public System.DateTime amz_store_datetime { get; set; }
         public string amz_filename { get; set; }
+        public string tpo_sigla { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tb_dwn_downloads> tb_dwn_downloads { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tb_fky_found_keys> tb_fky_found_keys { get; set; }
+        public virtual tb_tpo_tipos_origem tb_tpo_tipos_origem { get; set; }
     }
 }
